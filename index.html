@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Snapchat — Proposal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --y:#FFFC00;--black:#0A0A0A;--bg:#F5F5F3;--white:#FFFFFF;
+  --bdr:#E4E4E0;--bdr2:#CCCCCA;--t:#0A0A0A;--t2:#666666;--t3:#AAAAAA;
+  --fh:'Unbounded',sans-serif;--fb:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:var(--fb);background:var(--bg);color:var(--t);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--black);z-index:9999;width:0;pointer-events:none}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .3s}
+nav.scrolled{background:rgba(245,245,243,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr)}
+.nav-inner{max-width:980px;margin:0 auto;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.nav-ghost{width:30px;height:30px;background:var(--y);border-radius:50%;display:grid;place-items:center;flex-shrink:0}
+.nav-ghost img{width:16px;height:16px;display:block;filter:brightness(0)}
+.nav-brand{font-family:var(--fh);font-size:12px;font-weight:700;color:var(--black)}
+.nav-pill{font-size:11px;color:var(--t2);border:1px solid var(--bdr2);background:var(--white);padding:5px 14px;border-radius:99px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.nav-cta{font-family:var(--fb);font-size:12px;font-weight:600;background:var(--black);color:var(--white);border:none;padding:9px 20px;border-radius:8px;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;transition:background .15s}
+.nav-cta:hover{background:#333}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 28px 72px;max-width:980px;margin:0 auto;position:relative;z-index:2}
+.hero-orbs{position:fixed;inset:0;pointer-events:none;z-index:0}
+.orb{position:absolute;border-radius:50%;filter:blur(90px)}
+.o1{width:600px;height:600px;background:var(--y);opacity:.2;top:-250px;right:-150px;animation:ob1 10s ease-in-out infinite}
+.o2{width:400px;height:400px;background:#d0f5ea;opacity:.3;bottom:-100px;left:-130px;animation:ob2 13s ease-in-out infinite}
+@keyframes ob1{0%,100%{transform:translate(0,0)}50%{transform:translate(-25px,20px)}}
+@keyframes ob2{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-15px)}}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.015;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.hero-eyebrow{display:inline-flex;align-items:center;margin-bottom:28px;opacity:0;animation:fadeUp .6s .2s forwards}
+.eyebrow-pill{font-size:11px;font-weight:500;letter-spacing:.12em;color:var(--black);background:var(--y);padding:6px 16px;border-radius:99px;display:flex;align-items:center;gap:7px;text-transform:uppercase}
+.e-dot{width:5px;height:5px;background:var(--black);border-radius:50%;animation:pulse 2s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+
+.hero-title{font-family:var(--fh);font-size:clamp(36px,6vw,76px);font-weight:900;line-height:.95;letter-spacing:-.03em;margin-bottom:24px;color:var(--black)}
+.tline{display:block;overflow:hidden}
+.tline-in{display:block;transform:translateY(110%);animation:slideUp .8s cubic-bezier(.16,1,.3,1) forwards}
+.tline:nth-child(1) .tline-in{animation-delay:.15s}
+.tline:nth-child(2) .tline-in{animation-delay:.25s}
+.tline:nth-child(3) .tline-in{animation-delay:.35s}
+.hl{background:var(--y);color:var(--black);padding:0 4px;display:inline}
+.hl-outline{-webkit-text-stroke:2px var(--black);color:transparent}
+@keyframes slideUp{to{transform:translateY(0)}}
+@keyframes fadeUp{to{opacity:1;transform:none}}
+
+.hero-desc{font-size:clamp(15px,1.8vw,18px);color:var(--t2);line-height:1.8;max-width:540px;margin-bottom:36px;font-weight:300;opacity:0;animation:fadeUp .7s .55s forwards}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;opacity:0;animation:fadeUp .7s .7s forwards}
+.htag{font-size:12px;color:var(--t2);background:var(--white);border:1px solid var(--bdr2);padding:6px 16px;border-radius:99px}
+.htag strong{color:var(--t);font-weight:500}
+.hero-scroll{position:absolute;bottom:28px;right:0;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.35}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--black),transparent);animation:scrollAnim 2.2s ease-in-out infinite}
+@keyframes scrollAnim{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.scroll-lbl{font-size:9px;letter-spacing:.14em;color:var(--t3);text-transform:uppercase}
+
+/* ── PERSONA SELECTOR ── */
+.persona-bar{background:var(--white);border-top:3px solid var(--y);border-bottom:1px solid var(--bdr);padding:24px 28px;position:relative;z-index:200}
+.persona-bar-inner{max-width:980px;margin:0 auto}
+.persona-bar-label{font-size:13px;color:var(--t2);margin-bottom:14px}
+.persona-bar-label strong{color:var(--black);font-weight:600}
+.persona-btns{display:flex;gap:10px;flex-wrap:wrap}
+.pbtn{flex:1;min-width:220px;display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:12px;border:2px solid var(--bdr);background:var(--bg);font-family:var(--fb);cursor:pointer;text-align:left;transition:all .2s}
+.pbtn:hover{border-color:var(--bdr2);background:var(--white)}
+.pbtn.on{border-color:var(--black);background:var(--black)}
+.pbtn-icon{font-size:24px;flex-shrink:0}
+.pbtn-title{display:block;font-family:var(--fh);font-size:13px;font-weight:700;color:var(--t);letter-spacing:-.01em;margin-bottom:2px}
+.pbtn.on .pbtn-title{color:var(--y)}
+.pbtn-desc{display:block;font-size:11px;color:var(--t3);line-height:1.4}
+.pbtn.on .pbtn-desc{color:rgba(255,255,255,.45)}
+
+/* MARQUEE */
+.marquee-strip{background:var(--black);padding:18px 0;overflow:hidden}
+.marquee-track{display:flex;animation:marquee 25s linear infinite;width:max-content}
+.marquee-track:hover{animation-play-state:paused}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.m-item{display:flex;align-items:center;gap:12px;padding:0 32px;flex-shrink:0}
+.m-num{font-family:var(--fh);font-size:18px;font-weight:900;color:var(--y);letter-spacing:-.02em}
+.m-lbl{font-size:12px;color:rgba(255,255,255,.5)}
+.m-sep{width:4px;height:4px;background:rgba(255,255,255,.2);border-radius:50%;flex-shrink:0}
+
+/* STAT BAND */
+.stat-band{background:var(--y);padding:60px 28px}
+.stat-band-inner{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(0,0,0,.08)}
+@media(max-width:600px){.stat-band-inner{grid-template-columns:1fr}}
+.sb-item{background:var(--y);padding:32px 28px}
+.sb-num{font-family:var(--fh);font-size:clamp(40px,6vw,64px);font-weight:900;color:var(--black);line-height:1;letter-spacing:-.03em;margin-bottom:8px}
+.sb-lbl{font-size:14px;color:rgba(0,0,0,.65);line-height:1.6;margin-bottom:6px}
+.sb-src{font-size:10px;color:rgba(0,0,0,.4);letter-spacing:.04em}
+
+/* COMPARE TABLE */
+.compare-wrap{background:var(--white);border:1px solid var(--bdr);border-radius:20px;overflow:hidden}
+.compare-head{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;background:var(--bg);border-bottom:1px solid var(--bdr)}
+.ch-cell{padding:14px 18px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3)}
+.ch-cell.snap{background:var(--black);color:var(--y);display:flex;align-items:center;gap:6px}
+.compare-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border-bottom:1px solid var(--bdr);transition:background .15s}
+.compare-row:last-child{border-bottom:none}
+.compare-row:hover{background:rgba(255,252,0,.04)}
+.cr-cell{padding:14px 18px;font-size:13px;color:var(--t2);display:flex;align-items:center}
+.cr-cell.label{font-weight:500;color:var(--black)}
+.cr-cell.snap{font-weight:600;color:var(--black)}
+.badge-yes{background:var(--y);color:var(--black);font-size:10px;font-weight:700;padding:2px 9px;border-radius:99px;margin-left:6px}
+@media(max-width:640px){.compare-head,.compare-row{grid-template-columns:1.4fr 1fr 1fr 1fr}.ch-cell,.cr-cell{padding:10px 10px;font-size:11px}}
+
+/* SECTIONS */
+.section{padding:80px 28px;max-width:980px;margin:0 auto}
+.section.tight{padding-top:40px}
+.chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);background:var(--y);padding:5px 12px;border-radius:6px;margin-bottom:18px}
+.sec-h{font-family:var(--fh);font-size:clamp(24px,3.8vw,42px);font-weight:900;line-height:1.02;letter-spacing:-.025em;color:var(--black);margin-bottom:10px}
+.sec-p{font-size:15px;color:var(--t2);line-height:1.8;max-width:520px;margin-bottom:36px;font-weight:300}
+.sec-rule{max-width:980px;margin:0 auto;padding:0 28px}
+.rule-line{height:1px;background:var(--bdr)}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.07s}.rv.d2{transition-delay:.14s}.rv.d3{transition-delay:.21s}
+
+/* PRODUCTS */
+.products-list{display:flex;flex-direction:column;gap:4px}
+.pcard{background:var(--white);border:1px solid var(--bdr);border-radius:16px;overflow:hidden;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.pcard:hover{border-color:var(--bdr2);box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.pcard.open{border-color:var(--black)}
+.pcard-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;gap:14px;user-select:none}
+.pcard-left{display:flex;align-items:center;gap:14px}
+.pcard-icon{width:44px;height:44px;border-radius:12px;background:var(--bg);border:1px solid var(--bdr);display:grid;place-items:center;font-size:20px;flex-shrink:0;transition:all .2s}
+.pcard.open .pcard-icon{background:var(--black)}
+.pcard-title{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--black);margin-bottom:3px;letter-spacing:-.01em}
+.pcard-sub{font-size:12px;color:var(--t3)}
+.pcard-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.badge-top{font-size:10px;font-weight:700;padding:4px 11px;border-radius:6px;background:var(--black);color:var(--y)}
+.badge-std{font-size:10px;font-weight:600;padding:4px 11px;border-radius:6px;background:var(--bg);color:var(--t2);border:1px solid var(--bdr)}
+.pcard-chev{width:20px;height:20px;color:var(--t3);transition:transform .3s;flex-shrink:0}
+.pcard.open .pcard-chev{transform:rotate(180deg);color:var(--black)}
+.pcard-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1)}
+.pcard.open .pcard-body{max-height:500px}
+.pcard-body-inner{border-top:1px solid var(--bdr);padding:22px;background:var(--bg)}
+.pcard-desc{font-size:14px;color:var(--t2);line-height:1.75;margin-bottom:18px;font-weight:300}
+.pcard-stats{display:flex;gap:8px;flex-wrap:wrap}
+.pstat{background:var(--white);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px;flex:1;min-width:100px;position:relative}
+.pstat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--y);border-radius:0 0 10px 10px}
+.pstat-n{font-family:var(--fh);font-size:18px;font-weight:900;color:var(--black);margin-bottom:4px;letter-spacing:-.02em}
+.pstat-l{font-size:11px;color:var(--t2);line-height:1.4}
+
+/* CASE */
+.case-card{background:var(--white);border:1px solid var(--bdr);border-radius:20px;overflow:hidden}
+.case-top{padding:28px;border-bottom:1px solid var(--bdr)}
+.case-eyebrow{font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--t3);text-transform:uppercase;margin-bottom:10px}
+.case-title{font-family:var(--fh);font-size:clamp(16px,2.5vw,22px);font-weight:900;color:var(--black);line-height:1.15;letter-spacing:-.02em}
+.case-nums{display:grid;grid-template-columns:repeat(3,1fr);background:var(--y)}
+.case-num{padding:22px 16px;text-align:center;border-right:1px solid rgba(0,0,0,.08)}
+.case-num:last-child{border-right:none}
+.cn-v{font-family:var(--fh);font-size:clamp(20px,3vw,28px);font-weight:900;color:var(--black);margin-bottom:4px;letter-spacing:-.02em}
+.cn-l{font-size:10px;color:rgba(0,0,0,.55);line-height:1.4;font-weight:500}
+.case-bottom{padding:24px}
+.case-desc{font-size:13px;color:var(--t2);line-height:1.75;font-weight:300}
+
+/* TIMELINE */
+.tl{display:flex;flex-direction:column}
+.tl-row{display:flex}
+.tl-spine{display:flex;flex-direction:column;align-items:center;width:56px;flex-shrink:0}
+.tl-num{width:40px;height:40px;background:var(--black);border-radius:50%;display:grid;place-items:center;font-family:var(--fh);font-size:13px;font-weight:900;color:var(--y);flex-shrink:0;z-index:1}
+.tl-line{width:2px;flex:1;background:var(--bdr);min-height:20px;margin:4px 0}
+.tl-row:last-child .tl-line{display:none}
+.tl-body{padding:4px 0 36px 16px;flex:1}
+.tl-phase{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--t3);text-transform:uppercase;margin-bottom:6px}
+.tl-name{font-family:var(--fh);font-size:17px;font-weight:900;color:var(--black);margin-bottom:8px;letter-spacing:-.02em}
+.tl-desc{font-size:13px;color:var(--t2);line-height:1.75;margin-bottom:12px;font-weight:300}
+.tl-pills{display:flex;flex-wrap:wrap;gap:6px}
+.tl-pill{font-size:11px;color:var(--t2);background:var(--white);border:1px solid var(--bdr);border-radius:6px;padding:4px 11px}
+
+/* INVESTMENT */
+.inv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.inv-grid{grid-template-columns:1fr}}
+.icard{background:var(--white);border:1px solid var(--bdr);border-radius:18px;padding:26px;position:relative;transition:transform .2s,box-shadow .2s}
+.icard:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.1)}
+.icard.rec{background:var(--black);border-color:var(--black)}
+.icard.rec::before{content:'RECOMMENDED';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--y);color:var(--black);font-family:var(--fb);font-size:9px;font-weight:700;letter-spacing:.1em;padding:4px 14px;border-radius:99px;white-space:nowrap}
+.i-name{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--t);margin-bottom:6px;letter-spacing:-.01em}
+.icard.rec .i-name{color:var(--white)}
+.i-price{font-family:var(--fh);font-size:32px;font-weight:900;color:var(--black);margin-bottom:20px;letter-spacing:-.03em;line-height:1}
+.icard.rec .i-price{color:var(--y)}
+.i-items{list-style:none;display:flex;flex-direction:column}
+.i-items li{font-size:12px;color:var(--t2);padding:9px 0;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:9px}
+.i-items li:last-child{border-bottom:none}
+.icard.rec .i-items li{color:rgba(255,255,255,.65);border-bottom-color:rgba(255,255,255,.08)}
+.i-dot{width:5px;height:5px;background:var(--y);border-radius:50%;flex-shrink:0}
+
+/* CALCULATOR — BUYER */
+.calc-section{margin-bottom:2.5rem}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-bottom:1.4rem}
+@media(max-width:540px){.calc-grid{grid-template-columns:1fr}}
+.calc-label{font-size:12px;color:var(--t2);font-weight:500;display:block;margin-bottom:8px}
+.slider-row{display:flex;align-items:center;gap:12px}
+.slider-row input[type=range]{flex:1;cursor:pointer}
+.calc-val{font-family:var(--fh);font-size:15px;font-weight:900;color:var(--black);min-width:84px;text-align:right;flex-shrink:0;letter-spacing:-.01em}
+.rt-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.4rem}
+.rt-btn{font-size:12px;font-weight:500;padding:7px 15px;border-radius:99px;border:1px solid var(--bdr2);background:var(--white);color:var(--t2);cursor:pointer;transition:all .15s;font-family:var(--fb)}
+.rt-btn:hover{border-color:var(--black);color:var(--black)}
+.rt-btn.sel{background:var(--black);border-color:var(--black);color:var(--y);font-weight:600}
+.calc-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1.5rem}
+@media(min-width:500px){.calc-cards{grid-template-columns:repeat(4,1fr)}}
+.cc{background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:1rem;position:relative}
+.cc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--y);border-radius:0 0 14px 14px}
+.cc.cc-hero{background:var(--black);border-color:var(--black)}
+.cc.cc-hero::after{background:var(--y)}
+.cc-lbl{font-size:11px;color:var(--t3);margin-bottom:5px;line-height:1.3}
+.cc.cc-hero .cc-lbl{color:rgba(255,255,255,.45)}
+.cc-val{font-family:var(--fh);font-size:clamp(17px,2.5vw,22px);font-weight:900;color:var(--black);line-height:1.1;letter-spacing:-.02em}
+.cc.cc-hero .cc-val{color:var(--y)}
+.cc-sub{font-size:11px;color:var(--t3);margin-top:3px;line-height:1.35}
+.cc.cc-hero .cc-sub{color:rgba(255,255,255,.35)}
+.bar-row{margin-bottom:12px}
+.bar-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--t2);margin-bottom:5px}
+.bar-track{height:8px;background:var(--bg);border-radius:99px;overflow:hidden;border:1px solid var(--bdr)}
+.bar-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.16,1,.3,1)}
+.calc-breakdown{background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:1rem 1.25rem;margin-bottom:1rem}
+.cbd-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:13px}
+.cbd-row:last-child{border-bottom:none;padding-top:10px}
+.cbd-lbl{color:var(--t2)}
+.cbd-val{color:var(--black);font-weight:500}
+.cbd-row:last-child .cbd-lbl,.cbd-row:last-child .cbd-val{font-weight:700}
+
+/* CALCULATOR — EXEC */
+.exec-goal-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.6rem}
+.eg-btn{font-size:12px;font-weight:500;padding:7px 15px;border-radius:99px;border:1px solid var(--bdr2);background:var(--white);color:var(--t2);cursor:pointer;transition:all .15s;font-family:var(--fb)}
+.eg-btn:hover{border-color:var(--black);color:var(--black)}
+.eg-btn.sel{background:var(--black);border-color:var(--black);color:var(--y);font-weight:600}
+.exec-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:1.5rem}
+@media(min-width:500px){.exec-cards{grid-template-columns:repeat(3,1fr)}}
+.ec{background:var(--white);border:1px solid var(--bdr);border-radius:16px;padding:1.25rem;position:relative}
+.ec::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--y);border-radius:0 0 16px 16px}
+.ec.ec-hero{background:var(--black);border-color:var(--black);grid-column:1/-1}
+@media(min-width:500px){.ec.ec-hero{grid-column:auto}}
+.ec.ec-hero::after{background:var(--y)}
+.ec-lbl{font-size:12px;color:var(--t3);margin-bottom:6px;font-weight:400}
+.ec.ec-hero .ec-lbl{color:rgba(255,255,255,.45)}
+.ec-val{font-family:var(--fh);font-size:clamp(22px,3.5vw,32px);font-weight:900;color:var(--black);line-height:1;letter-spacing:-.03em;margin-bottom:4px}
+.ec.ec-hero .ec-val{color:var(--y)}
+.ec-sub{font-size:12px;color:var(--t2);line-height:1.4}
+.ec.ec-hero .ec-sub{color:rgba(255,255,255,.4)}
+.exec-statement{background:var(--y);border-radius:14px;padding:20px 24px;margin-bottom:1rem}
+.es-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:rgba(0,0,0,.45);text-transform:uppercase;margin-bottom:8px}
+.es-text{font-family:var(--fh);font-size:clamp(14px,2.2vw,18px);font-weight:900;color:var(--black);line-height:1.3;letter-spacing:-.02em}
+
+/* DISCLAIMER */
+.disclaimer{font-size:11px;color:var(--t3);line-height:1.65;padding:12px 16px;background:var(--white);border:1px solid var(--bdr);border-radius:10px;margin-top:8px;margin-bottom:1.5rem}
+
+/* CTA */
+.cta-band{background:var(--black);padding:100px 28px}
+.cta-inner{max-width:980px;margin:0 auto;text-align:center;position:relative}
+.cta-inner::before{content:'';position:absolute;top:-100px;left:0;right:0;height:3px;background:var(--y)}
+.cta-h{font-family:var(--fh);font-size:clamp(30px,5.5vw,60px);font-weight:900;line-height:.97;letter-spacing:-.03em;color:var(--white);margin-bottom:18px}
+.cta-hl{background:var(--y);color:var(--black);padding:0 8px;display:inline}
+.cta-p{font-size:16px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:44px;max-width:460px;margin-left:auto;margin-right:auto;font-weight:300}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--y);color:var(--black);font-family:var(--fb);font-size:14px;font-weight:600;border:none;padding:16px 36px;border-radius:10px;cursor:pointer;text-decoration:none;transition:transform .15s;display:inline-block}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-secondary{background:transparent;color:rgba(255,255,255,.7);font-family:var(--fb);font-size:14px;border:1px solid rgba(255,255,255,.2);padding:16px 36px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .15s;display:inline-block}
+.btn-secondary:hover{border-color:rgba(255,255,255,.5);color:var(--white)}
+
+/* FOOTER */
+footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);padding:28px}
+.foot-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.foot-left{display:flex;align-items:center;gap:10px}
+.foot-ghost{width:24px;height:24px;background:var(--y);border-radius:50%;display:grid;place-items:center;flex-shrink:0}
+.foot-ghost img{width:13px;height:13px;filter:brightness(0)}
+.foot-brand{font-family:var(--fh);font-size:12px;font-weight:700;color:var(--white)}
+.foot-email{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:var(--white);font-family:var(--fb);font-size:12px;font-weight:500;padding:7px 14px;border-radius:7px;text-decoration:none;transition:background .15s}
+.foot-email:hover{background:rgba(255,255,255,.14)}
+
+@media(max-width:640px){
+  .hero{padding:0 20px 60px}
+  .section{padding:60px 20px}
+  .nav-inner{padding:15px 20px}
+  .nav-pill{display:none}
+  .persona-bar{padding:18px 20px}
+  .cta-band{padding:70px 20px}
+  footer{padding:24px 20px}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div class="hero-orbs"><div class="orb o1"></div><div class="orb o2"></div></div>
+<div class="grain"></div>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="nav-ghost"><img src="data:image/png;base64,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" alt="Snapchat"></div>
+      <span class="nav-brand">Snapchat</span>
+    </a>
+    <span class="nav-pill" id="navPill">Your personalised proposal</span>
+    <a class="nav-cta" href="#cta">Book a session →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="position:relative;z-index:2">
+  <div class="hero-eyebrow"><span class="eyebrow-pill"><span class="e-dot"></span><span id="eyebrowTxt">Tailored for you</span></span></div>
+  <h1 class="hero-title" id="heroTitle">
+    <span class="tline"><span class="tline-in">This proposal</span></span>
+    <span class="tline"><span class="tline-in">is built</span></span>
+    <span class="tline"><span class="tline-in hl-outline">for you.</span></span>
+  </h1>
+  <p class="hero-desc" id="heroDesc">Tell us how you think about marketing — we'll show you exactly what matters to you.</p>
+  <div class="hero-tags" id="heroTags"></div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span class="scroll-lbl">Scroll</span></div>
+</section>
+
+<!-- PERSONA SELECTOR — standalone, outside hero, high z-index -->
+<div class="persona-bar">
+  <div class="persona-bar-inner">
+    <p class="persona-bar-label">I am viewing this as a <strong>...</strong></p>
+    <div class="persona-btns">
+      <button class="pbtn on" id="pBuyer" type="button" onclick="setPersona('buyer')">
+        <span class="pbtn-icon">📊</span>
+        <span>
+          <span class="pbtn-title">Media buyer / planner</span>
+          <span class="pbtn-desc">Show me CPMs, reach, ROAS and benchmarks</span>
+        </span>
+      </button>
+      <button class="pbtn" id="pExec" type="button" onclick="setPersona('exec')">
+        <span class="pbtn-icon">💼</span>
+        <span>
+          <span class="pbtn-title">Executive / decision maker</span>
+          <span class="pbtn-desc">Show me the business case and ROI</span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-strip"><div class="marquee-track" id="marqueeTrack"></div></div>
+
+<!-- STAT BAND -->
+<div class="stat-band"><div class="stat-band-inner" id="statBand"></div></div>
+
+<!-- PLATFORM COMPARISON -->
+<section class="section">
+  <div class="rv"><span class="chip">Why Snapchat</span></div>
+  <div class="rv d1"><h2 class="sec-h">Snapchat vs the alternatives in Saudi Arabia</h2></div>
+  <div class="rv d2"><p class="sec-p">Your clients will ask why Snapchat over Meta or TikTok. Here's the answer.</p></div>
+  <div class="compare-wrap rv d3">
+    <div class="compare-head">
+      <div class="ch-cell">Metric</div>
+      <div class="ch-cell snap"><img src="data:image/png;base64,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" style="width:14px;height:14px;filter:invert(1) sepia(1) saturate(10) hue-rotate(0deg)" alt=""> Snapchat</div>
+      <div class="ch-cell">Meta</div>
+      <div class="ch-cell">TikTok</div>
+    </div>
+    <div class="compare-row"><div class="cr-cell label">KSA under-35 penetration</div><div class="cr-cell snap">90%+ <span class="badge-yes">#1</span></div><div class="cr-cell">~72%</div><div class="cr-cell">~58%</div></div>
+    <div class="compare-row"><div class="cr-cell label">GCC media ROI rank</div><div class="cr-cell snap">Highest <span class="badge-yes">+14%</span></div><div class="cr-cell">2nd</div><div class="cr-cell">3rd</div></div>
+    <div class="compare-row"><div class="cr-cell label">Active attention vs in-feed</div><div class="cr-cell snap">5× higher <span class="badge-yes">Best</span></div><div class="cr-cell">Baseline</div><div class="cr-cell">~2×</div></div>
+    <div class="compare-row"><div class="cr-cell label">AR / try-on capability</div><div class="cr-cell snap">World-leading <span class="badge-yes">✓</span></div><div class="cr-cell">Limited</div><div class="cr-cell">Growing</div></div>
+    <div class="compare-row"><div class="cr-cell label">Snap Map / local discovery</div><div class="cr-cell snap">350M visits/mo <span class="badge-yes">✓</span></div><div class="cr-cell">✗</div><div class="cr-cell">✗</div></div>
+    <div class="compare-row"><div class="cr-cell label">Brand Lift study included</div><div class="cr-cell snap">Yes <span class="badge-yes">✓</span></div><div class="cr-cell">Paid add-on</div><div class="cr-cell">Limited</div></div>
+  </div>
+</section>
+
+<div class="sec-rule"><div class="rule-line"></div></div>
+
+<!-- PRODUCTS -->
+<section class="section tight">
+  <div class="rv"><span class="chip" id="prodEyebrow">Recommended for you</span></div>
+  <div class="rv d1"><h2 class="sec-h" id="prodTitle">The awareness toolkit</h2></div>
+  <div class="rv d2"><p class="sec-p" id="prodDesc">Tap each product to explore.</p></div>
+  <div class="products-list rv d3" id="productsList"></div>
+</section>
+
+<div class="sec-rule"><div class="rule-line"></div></div>
+
+<!-- CASE -->
+<section class="section tight">
+  <div class="rv"><span class="chip">Proof it works</span></div>
+  <div class="rv d1"><h2 class="sec-h">Results from the region</h2></div>
+  <div class="rv d2"><p class="sec-p">Real uplift numbers from Snapchat Brand Lift studies with brands in MENA.</p></div>
+  <div class="case-card rv d3" id="caseCard"></div>
+</section>
+
+<div class="sec-rule"><div class="rule-line"></div></div>
+
+<!-- TIMELINE -->
+<section class="section tight">
+  <div class="rv"><span class="chip">Campaign plan</span></div>
+  <div class="rv d1"><h2 class="sec-h">12-week sprint</h2></div>
+  <div class="rv d2"><p class="sec-p">Launch, build, and measure — with clear deliverables at every step.</p></div>
+  <div class="tl rv d3" id="timeline"></div>
+</section>
+
+<div class="sec-rule"><div class="rule-line"></div></div>
+
+<!-- INVESTMENT -->
+<section class="section tight">
+  <div class="rv"><span class="chip">Investment</span></div>
+  <div class="rv d1"><h2 class="sec-h">What does your investment return?</h2></div>
+  <div class="rv d2"><p class="sec-p">Adjust the sliders to match your budget and see your projected returns — grounded in real GCC data.</p></div>
+
+  <!-- BUYER CALCULATOR -->
+  <div id="calcBuyer">
+    <div class="rt-row">
+      <button class="rt-btn sel" data-kpi="awareness" data-cpr="8"  onclick="selRT(this)" type="button">Brand awareness</button>
+      <button class="rt-btn"     data-kpi="leads"     data-cpr="35" onclick="selRT(this)" type="button">Lead generation</button>
+      <button class="rt-btn"     data-kpi="sales"     data-cpr="50" onclick="selRT(this)" type="button">Sales / conversions</button>
+      <button class="rt-btn"     data-kpi="installs"  data-cpr="12" onclick="selRT(this)" type="button">App installs</button>
+      <button class="rt-btn"     data-kpi="footfall"  data-cpr="18" onclick="selRT(this)" type="button">Footfall & visits</button>
+    </div>
+    <div class="calc-grid">
+      <div>
+        <label class="calc-label">Monthly Snapchat budget (USD)</label>
+        <div class="slider-row"><input type="range" id="cBudget" min="10000" max="500000" step="5000" value="80000" oninput="snapCalc()"><span id="cBudgetVal" class="calc-val">$80,000</span></div>
+      </div>
+      <div>
+        <label class="calc-label">Your current cost per result on other platforms</label>
+        <div class="slider-row"><input type="range" id="cCPR" min="1" max="300" step="1" value="8" oninput="snapCalc()"><span id="cCPRVal" class="calc-val">$8</span></div>
+      </div>
+    </div>
+    <div class="calc-cards" id="cCards"></div>
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:13px;font-weight:600;color:var(--black);margin-bottom:14px">Cost per result — Snapchat vs your current spend</div>
+      <div class="bar-row"><div class="bar-meta"><span>Snapchat (projected)</span><span id="cbsv">—</span></div><div class="bar-track"><div id="cbsBar" class="bar-fill" style="background:var(--y);width:0%"></div></div></div>
+      <div class="bar-row"><div class="bar-meta"><span>Your current benchmark</span><span id="cbbv">—</span></div><div class="bar-track"><div id="cbbBar" class="bar-fill" style="background:var(--black);width:100%"></div></div></div>
+      <div class="bar-row"><div class="bar-meta"><span>GCC industry average (est.)</span><span id="cbiv">—</span></div><div class="bar-track"><div id="cbiBar" class="bar-fill" style="background:var(--bdr2);width:0%"></div></div></div>
+    </div>
+    <div class="calc-breakdown" id="cBreakdown"></div>
+    <div class="disclaimer">All projections are indicative estimates based on real GCC Snapchat campaign benchmarks (Snap × OMG MENA × Annalect MMM Analysis, 2025). Actual results are subject to change based on campaign creative, targeting, seasonality, and market conditions.</div>
+  </div>
+
+  <!-- EXEC CALCULATOR -->
+  <div id="calcExec" style="display:none">
+    <div class="exec-goal-row">
+      <button class="eg-btn sel" data-goal="reach"      onclick="selEG(this)" type="button">Reach millions of Saudis</button>
+      <button class="eg-btn"     data-goal="awareness"  onclick="selEG(this)" type="button">Lift brand awareness</button>
+      <button class="eg-btn"     data-goal="engagement" onclick="selEG(this)" type="button">Drive engagement & UGC</button>
+      <button class="eg-btn"     data-goal="action"     onclick="selEG(this)" type="button">Drive measurable action</button>
+    </div>
+    <div style="margin-bottom:1.6rem">
+      <label class="calc-label">Investment (USD / month)</label>
+      <div class="slider-row" style="margin-top:8px"><input type="range" id="eBudget" min="60000" max="500000" step="10000" value="150000" oninput="execCalc()"><span id="eBudgetVal" class="calc-val">$150,000</span></div>
+    </div>
+    <div class="exec-cards" id="eCards"></div>
+    <div class="exec-statement" id="eStatement"></div>
+    <div class="disclaimer">All projections are indicative estimates based on real GCC Snapchat campaign benchmarks (Snap × OMG MENA × Annalect MMM Analysis, 2025). Actual results are subject to change based on campaign execution, creative quality, market conditions, and targeting parameters.</div>
+  </div>
+
+  <!-- PACKAGES -->
+  <div class="rv" style="margin-top:2rem"><h2 class="sec-h">Choose your scale</h2></div>
+  <div class="rv d1"><p class="sec-p">All packages include setup, creative guidance, and a full post-campaign performance report.</p></div>
+  <div class="inv-grid rv d2" id="invGrid"></div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band" id="cta">
+  <div class="cta-inner rv">
+    <h2 class="cta-h"><span class="cta-hl" id="ctaHl">Your audience</span><br>is on Snapchat<br>right now.</h2>
+    <p class="cta-p" id="ctaP">Let's make sure your brand is what they see.</p>
+    <div class="cta-btns">
+      <a class="btn-primary" id="ctaWa" href="#" target="_blank">Book a strategy session →</a>
+      <button class="btn-secondary" id="ctaShareBtn" type="button">Share this proposal</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-left">
+      <div class="foot-ghost"><img src="data:image/png;base64,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" alt="Snapchat"></div>
+      <span class="foot-brand">Snapchat MENA</span>
+    </div>
+    <div>
+      <span style="font-size:13px;color:rgba(255,255,255,.5);margin-right:12px">Ahmed Mahdy</span>
+      <a class="foot-email" href="mailto:amahdy@snapchat.com">amahdy@snapchat.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────────────────────
+const SECTORS={
+  tourism:{
+    title:(c)=>[`Reaching every Saudi`,`traveller — for`,`<span class="hl">${c}</span>`],
+    desc:(c)=>`A brand awareness strategy built for ${c} — connecting your destinations with 21M daily Snapchat users across the Kingdom.`,
+    tags:[["Objective","Brand awareness"],["Market","KSA & GCC"],["Audience","Saudi travelers 18–35"]],
+    prodTitle:"The tourism awareness toolkit",
+    prodDesc:"Ranked by fit for destination and tourism brands. Tap each to explore.",
+    products:[
+      {icon:"📍",name:"AR Lenses & Filters",sub:"Make your destination viral",tag:"Top pick",rec:true,
+       desc:"Branded AR experiences turn visitors into ambassadors. A NEOM world lens, a Diriyah cultural filter, or a seasonal campaign lens gets shared across every user's friend network — organic reach stacked on top of your paid media.",
+       stats:[{v:"6×",l:"more shares vs standard ads"},{v:"180M",l:"daily AR users worldwide"},{v:"94M",l:"AR sessions daily"}]},
+      {icon:"▶",name:"Snap Ads & video",sub:"Full-screen, full attention",tag:"Mass reach",rec:false,
+       desc:"9:16 vertical video that fills the entire phone screen. The first second is non-skippable — a guaranteed impression every time. Best format for destination films, seasonal campaigns, and hero awareness moments.",
+       stats:[{v:"80%+",l:"KSA audience reachable"},{v:"2×",l:"ad recall vs linear TV"},{v:"34%",l:"higher completion rate"}]},
+      {icon:"🗺",name:"Promoted Places",sub:"Put your destination on the map",tag:"Footfall",rec:false,
+       desc:"Your venue pinned on Snap Map — 350M monthly visitors. Users find your attraction, hotel, or event exactly when they're deciding where to go.",
+       stats:[{v:"350M",l:"monthly Snap Map visits"},{v:"5×",l:"reported footfall uplift"},{v:"#1",l:"social discovery map globally"}]},
+      {icon:"⭐",name:"Creator partnerships",sub:"400+ KSA voices ready",tag:"Authentic reach",rec:false,
+       desc:"Saudi travel, lifestyle, and culture creators give your destination an authentic voice. Mega creators for hero reach, mid-tier for niche storytelling, nano creators for genuine UGC.",
+       stats:[{v:"400+",l:"active KSA creators"},{v:"4×",l:"engagement lift"},{v:"3×",l:"higher trust score"}]},
+      {icon:"🔄",name:"Dynamic Ads",sub:"Re-engage high-intent audiences",tag:"Retargeting",rec:false,
+       desc:"Retarget users who engaged with your content or visited your website. Serve personalised destination content at the right moment in their planning journey.",
+       stats:[{v:"3×",l:"ROAS uplift"},{v:"60%",l:"lower CPA vs cold audiences"},{v:"2×",l:"conversion rate lift"}]},
+    ],
+    case:{tag:"Tourism — MENA brand lift study",title:"Destination awareness: Snap Ads + AR Lens",
+      desc:"A regional tourism authority ran a 10-week Snapchat campaign combining a hero destination film with a custom AR Lens for National Day. The Snapchat Brand Lift study showed significant uplift across every awareness metric.",
+      nums:[{v:"+18pt",l:"Aided brand awareness"},{v:"+14pt",l:"Destination consideration"},{v:"22M",l:"Unique users reached"}]},
+    tl:[
+      {phase:"Weeks 1–4 · Launch",name:"Hero film + AR Lens",desc:"Full-screen Snap Ad campaign launches. Branded AR Lens goes live. Three mega-creators activated. Promoted Places pin live on Snap Map.",pills:["Snap Ads","AR Lens","Mega creators","Snap Map"]},
+      {phase:"Weeks 5–10 · Build",name:"Creator wave + retargeting",desc:"Mid-tier creators publish authentic destination stories. Dynamic Ads retarget viewers who engaged with Phase 1.",pills:["Mid-tier creators","Dynamic Ads","Nano UGC"]},
+      {phase:"Weeks 11–12 · Measure",name:"Brand lift readout",desc:"Snapchat Brand Lift study delivers awareness, recall, and consideration uplift data. Full performance report delivered.",pills:["Brand Lift study","Full report"]},
+    ],
+    inv:[
+      {name:"Reach starter",price:"$60K+",rec:false,items:["Snap Ads video awareness","Promoted Places on Snap Map","Basic targeting & reporting"]},
+      {name:"Full awareness",price:"$150K+",rec:true,items:["Snap Ads + Story Ads","Custom AR Lens","2 creator partnerships","Promoted Places","Brand Lift study"]},
+      {name:"Icon campaign",price:"Custom",rec:false,items:["Full product suite","World Lens + seasonal lenses","Mega + mid + nano creators","Always-on Snap Map","Dedicated account team"]},
+    ],
+    ctaHl:"Every Saudi traveller",
+    ctaP:(c)=>`${c}'s audience is on Snapchat every single day. Let's make your destinations impossible to scroll past.`
+  },
+  retail:{
+    title:(c)=>[`Put <span class="hl">${c}</span>`,`in front of every`,`Saudi shopper`],
+    desc:(c)=>`A commerce-first Snapchat strategy for ${c} — from product discovery to purchase, across KSA and the GCC.`,
+    tags:[["Objective","Sales & conversions"],["Market","KSA & GCC"],["Peak","Ramadan · White Friday"]],
+    prodTitle:"The retail commerce toolkit",prodDesc:"Ranked for conversion impact. Tap to explore.",
+    products:[
+      {icon:"🔄",name:"Dynamic Ads",sub:"Your catalog, always on",tag:"Top pick",rec:true,desc:"Auto-generate personalised product ads from your catalog and retarget users who browsed but didn't convert. Proven to drive 3× ROAS for GCC retail brands.",stats:[{v:"3×",l:"ROAS uplift in GCC"},{v:"60%",l:"lower CPA"},{v:"2×",l:"conversion rate lift"}]},
+      {icon:"▶",name:"Snap Ads & video",sub:"Hero content for peak moments",tag:"Awareness",rec:false,desc:"Full-screen video for product launches, seasonal sales, and brand campaigns. Unmatched reach among 18–35 Saudi shoppers.",stats:[{v:"80%+",l:"KSA audience reachable"},{v:"2×",l:"ad recall vs TV"},{v:"21M",l:"daily KSA users"}]},
+      {icon:"📍",name:"AR Try-on Lenses",sub:"Try before they buy",tag:"Consideration",rec:false,desc:"Virtual try-on for fashion, beauty, accessories. Reduces purchase hesitation and drives sharing.",stats:[{v:"94M",l:"AR try-on sessions daily"},{v:"6×",l:"more shares"},{v:"-28%",l:"return rate reduction"}]},
+      {icon:"⭐",name:"Creator commerce",sub:"Recommendations that convert",tag:"Trust",rec:false,desc:"KSA lifestyle creators showcase your products natively — feels like a recommendation, not an ad.",stats:[{v:"400+",l:"KSA creators"},{v:"4×",l:"engagement lift"},{v:"3×",l:"higher purchase intent"}]},
+    ],
+    case:{tag:"Retail — GCC commerce brand lift",title:"Ramadan: Dynamic Ads + Creator partnerships",desc:"A GCC retail brand ran Dynamic Ads with creator partnerships during Ramadan. Dramatic reduction in cost per purchase and major brand recall uplift among 18–30 year olds.",nums:[{v:"3.2×",l:"ROAS achieved"},{v:"-58%",l:"Cost per purchase"},{v:"+22pt",l:"Brand recall lift"}]},
+    tl:[
+      {phase:"Weeks 1–3 · Pre-season",name:"Catalog setup + awareness",desc:"Dynamic Ads catalog synced. Hero Snap Ads go live. Creator briefing begins.",pills:["Dynamic Ads","Snap Ads","Creator brief"]},
+      {phase:"Weeks 4–9 · Peak season",name:"Full commerce push",desc:"Creator content live. AR Lens launched. Dynamic retargeting active. Ramadan/White Friday moments.",pills:["Creator content","AR Lens","Retargeting"]},
+      {phase:"Weeks 10–12 · Retain",name:"Loyalty + reporting",desc:"Retarget buyers. ROAS analysis. Brand Lift results delivered.",pills:["Retention ads","Brand Lift study","Report"]},
+    ],
+    inv:[
+      {name:"Commerce starter",price:"$60K+",rec:false,items:["Dynamic Ads catalog","Snap Ads awareness","Basic reporting"]},
+      {name:"Full commerce",price:"$150K+",rec:true,items:["Dynamic Ads + retargeting","AR try-on Lens","3 creator partnerships","Seasonal moment campaigns","Brand Lift study"]},
+      {name:"Category leader",price:"Custom",rec:false,items:["Full product suite","Always-on Dynamic Ads","Mega creator roster","AR Lens suite","Dedicated account team"]},
+    ],
+    ctaHl:"Every Saudi shopper",ctaP:(c)=>`${c}'s customers are on Snapchat right now. Let's close the loop between inspiration and purchase.`
+  },
+  telecom:{
+    title:(c)=>[`<span class="hl">${c}</span> — on`,`every Saudi's`,`favourite screen`],
+    desc:(c)=>`A mass-reach Snapchat strategy for ${c}. With 80%+ KSA penetration, your audience is already here.`,
+    tags:[["Objective","Brand & product awareness"],["Market","KSA & GCC"],["Audience","Saudi 18–35"]],
+    prodTitle:"The telecoms awareness toolkit",prodDesc:"Ranked for reach and brand impact.",
+    products:[
+      {icon:"▶",name:"Snap Ads & video",sub:"Unmatched KSA mass reach",tag:"Top pick",rec:true,desc:"No other platform reaches more 18–35s in Saudi Arabia. Full-screen, non-skippable first second. Ideal for plan launches, device reveals, 5G campaigns.",stats:[{v:"80%+",l:"KSA audience reachable"},{v:"21M",l:"daily KSA users"},{v:"#1",l:"reach among 18–35s KSA"}]},
+      {icon:"📍",name:"AR Lenses",sub:"Interactive product demos",tag:"Innovation",rec:false,desc:"Make device launches and new features tangible and shareable through the camera.",stats:[{v:"6×",l:"more shares"},{v:"180M",l:"daily AR users"},{v:"2×",l:"aided brand recall lift"}]},
+      {icon:"🔄",name:"Dynamic Ads",sub:"Retarget plan upgraders",tag:"Conversion",rec:false,desc:"Retarget users who browsed your plans or started an upgrade flow. Personalise by plan tier, device, or location.",stats:[{v:"3×",l:"ROAS uplift"},{v:"60%",l:"lower CPA"},{v:"2×",l:"app install rate"}]},
+      {icon:"⭐",name:"Creator tools",sub:"Human voices for a digital brand",tag:"Youth trust",rec:false,desc:"Tech and lifestyle creators build brand credibility with the youth audience making first contract decisions.",stats:[{v:"400+",l:"KSA creators"},{v:"4×",l:"engagement lift"},{v:"3×",l:"higher trust score"}]},
+    ],
+    case:{tag:"Telecom — KSA 5G launch",title:"5G product launch: Snap Ads + AR Lens",desc:"A major GCC telecom brand launched a 5G product on Snapchat. The AR Lens became the most shared piece of launch content across all channels.",nums:[{v:"+21pt",l:"5G awareness lift"},{v:"18M",l:"Unique users reached"},{v:"2×",l:"Better recall vs display"}]},
+    tl:[
+      {phase:"Weeks 1–4 · Launch",name:"Hero campaign + AR Lens",desc:"Mass reach Snap Ads go live. AR Lens launched for interactive demo. Three tech creators activated.",pills:["Snap Ads","AR Lens","Creator content"]},
+      {phase:"Weeks 5–10 · Sustain",name:"Retargeting + creator wave",desc:"Dynamic Ads retarget with plan-specific messaging. Mid-tier creator wave. Location targeting for in-store footfall.",pills:["Dynamic Ads","Mid-tier creators","Geo targeting"]},
+      {phase:"Weeks 11–12 · Measure",name:"Brand lift readout",desc:"Brand Lift measures awareness, consideration, and intent. Full report delivered.",pills:["Brand Lift study","Report"]},
+    ],
+    inv:[
+      {name:"Reach starter",price:"$60K+",rec:false,items:["Snap Ads video","KSA audience targeting","Basic reporting"]},
+      {name:"Full launch",price:"$150K+",rec:true,items:["Snap Ads + Story Ads","AR Lens","3 creator partnerships","Dynamic Ads retargeting","Brand Lift study"]},
+      {name:"Market leader",price:"Custom",rec:false,items:["Full product suite","Premium AR experiences","Mega + mid creators","Always-on retargeting","Dedicated account team"]},
+    ],
+    ctaHl:"Every Saudi subscriber",ctaP:(c)=>`${c}'s target audience is on Snapchat right now. Let's make your next campaign impossible to ignore.`
+  },
+  finance:{
+    title:(c)=>[`Building trust with`,`Saudi youth —`,`for <span class="hl">${c}</span>`],
+    desc:(c)=>`A Snapchat brand strategy for ${c} — reaching young Saudis entering the workforce and investment market.`,
+    tags:[["Objective","Brand & product awareness"],["Market","KSA & GCC"],["Audience","Saudi 18–30"]],
+    prodTitle:"The financial brand toolkit",prodDesc:"Ranked for trust-building and awareness.",
+    products:[
+      {icon:"▶",name:"Snap Ads & video",sub:"Scale awareness among young Saudis",tag:"Top pick",rec:true,desc:"Reach young Saudis entering the workforce and making first financial decisions. Snapchat's 90% under-35 audience makes it dominant for financial brand awareness.",stats:[{v:"90%",l:"users under 35 in KSA"},{v:"21M",l:"daily active users"},{v:"#1",l:"reach among 18–30s KSA"}]},
+      {icon:"⭐",name:"Creator partnerships",sub:"Trust through authentic voices",tag:"Trust",rec:false,desc:"Finance and lifestyle creators humanise your brand and demystify products for young Saudis.",stats:[{v:"400+",l:"KSA creators"},{v:"4×",l:"engagement lift"},{v:"3×",l:"higher trust score"}]},
+      {icon:"🔄",name:"Dynamic Ads",sub:"Retarget intent, drive action",tag:"App installs",rec:false,desc:"Retarget users who showed interest in your app or products. Drive installs and registrations at lower CPA.",stats:[{v:"3×",l:"ROAS uplift"},{v:"60%",l:"lower CPA"},{v:"31%",l:"of Tamam's social loans from Snap"}]},
+      {icon:"🗺",name:"Promoted Places",sub:"Drive branch discovery",tag:"Footfall",rec:false,desc:"Pin your branches on Snap Map. Young Saudis discover your nearest touchpoint when they need it.",stats:[{v:"350M",l:"monthly Map visits"},{v:"5×",l:"footfall uplift"},{v:"#1",l:"social discovery map"}]},
+    ],
+    case:{tag:"Finance — Tamam KSA case study",title:"Youth banking: Snap Ads + Creator campaign",desc:"Tamam, a Saudi loan provider, found that 31% of all social media-driven loan applications came from Snapchat. Conversion-focused ads outperformed average media benchmarks by 4×.",nums:[{v:"31%",l:"of social loan applications"},{v:"4×",l:"above media benchmarks"},{v:"+16pt",l:"Brand awareness lift"}]},
+    tl:[
+      {phase:"Weeks 1–4 · Awareness",name:"Brand campaign + creators",desc:"Hero Snap Ads go live. Finance and lifestyle creators activated. App install campaign running in parallel.",pills:["Snap Ads","Creator content","App installs"]},
+      {phase:"Weeks 5–10 · Consideration",name:"Education + retargeting",desc:"Creator content shifts to product education. Dynamic Ads retarget. Promoted Places active.",pills:["Dynamic Ads","Creator education","Promoted Places"]},
+      {phase:"Weeks 11–12 · Measure",name:"Brand lift readout",desc:"Brand Lift measures awareness, consideration, and install intent. Full report delivered.",pills:["Brand Lift study","Report"]},
+    ],
+    inv:[
+      {name:"Awareness starter",price:"$60K+",rec:false,items:["Snap Ads video","Youth targeting KSA","Basic reporting"]},
+      {name:"Full brand launch",price:"$150K+",rec:true,items:["Snap Ads + Story Ads","3 creator partnerships","Dynamic Ads retargeting","Promoted Places","Brand Lift study"]},
+      {name:"Category leader",price:"Custom",rec:false,items:["Full product suite","Mega creator roster","Always-on retargeting","Branch discovery suite","Dedicated account team"]},
+    ],
+    ctaHl:"Saudi Arabia's next generation",ctaP:(c)=>`The people who will become ${c}'s best customers are on Snapchat right now. Let's introduce you.`
+  },
+  entertainment:{
+    title:(c)=>[`Make <span class="hl">${c}</span>`,`the event everyone`,`is snapping`],
+    desc:(c)=>`An entertainment marketing strategy for ${c} — AR, creators, and Snap Map working together to fill every seat.`,
+    tags:[["Objective","Awareness & tickets"],["Market","KSA & GCC"],["Audience","Saudi event-goers 16–35"]],
+    prodTitle:"The entertainment marketing toolkit",prodDesc:"Ranked for event hype and footfall.",
+    products:[
+      {icon:"📍",name:"AR Lenses & Filters",sub:"Make fans part of the show",tag:"Top pick",rec:true,desc:"Event AR lenses make fans co-creators. Every snap with your lens reaches their entire network — organic amplification on top of paid reach.",stats:[{v:"6×",l:"more shares"},{v:"180M",l:"daily AR users"},{v:"4.2×",l:"organic amplification"}]},
+      {icon:"🗺",name:"Promoted Places",sub:"Drive discovery and footfall",tag:"Venue",rec:false,desc:"Pin your venue on Snap Map. Users exploring what to do this weekend discover your event at the right moment.",stats:[{v:"350M",l:"monthly Map visits"},{v:"5×",l:"footfall uplift"},{v:"+31%",l:"venue discovery rate"}]},
+      {icon:"⭐",name:"Creator partnerships",sub:"Build the buzz before day one",tag:"Hype",rec:false,desc:"Sports and entertainment creators build pre-event anticipation. Nano creators during the event generate authentic UGC.",stats:[{v:"400+",l:"KSA creators"},{v:"4×",l:"engagement lift"},{v:"3×",l:"pre-event awareness"}]},
+      {icon:"▶",name:"Snap Ads",sub:"Targeted reach for ticket buyers",tag:"Sales",rec:false,desc:"Video ads targeting by location and entertainment interest. Direct-response campaigns that drive ticket sales at scale.",stats:[{v:"80%+",l:"KSA reach"},{v:"2×",l:"ad recall vs TV"},{v:"21M",l:"daily KSA users"}]},
+    ],
+    case:{tag:"Entertainment — Saudi events study",title:"Live event: AR Lens + Promoted Places + Creators",desc:"A major Saudi entertainment event ran a 3-week pre-event Snapchat campaign. The campaign drove significant footfall uplift and organic reach well beyond the paid spend.",nums:[{v:"+31%",l:"Venue footfall"},{v:"8M",l:"AR Lens impressions"},{v:"4.2×",l:"Organic amplification"}]},
+    tl:[
+      {phase:"3 weeks before · Build hype",name:"Creator countdown + Snap Map",desc:"Entertainment creators build anticipation. Promoted Places live. Snap Ads targeting event-interest audiences.",pills:["Creator countdown","Promoted Places","Snap Ads"]},
+      {phase:"Event week · Ignite",name:"AR Lens + live content",desc:"Branded AR Lens launches. Creators share live experiences. Snap Map drives walk-in footfall.",pills:["AR Lens","Creator live","Snap Map"]},
+      {phase:"Post-event · Extend",name:"Recap + next event",desc:"Creator recap extends conversation. Retarget attendees with upcoming events. Report delivered.",pills:["Recap content","Retargeting","Report"]},
+    ],
+    inv:[
+      {name:"Event starter",price:"$60K+",rec:false,items:["Snap Ads ticket sales","Promoted Places","Basic reporting"]},
+      {name:"Full event",price:"$150K+",rec:true,items:["AR Lens (event design)","Promoted Places + Snap Map","3 creator partnerships","Snap Ads awareness","Post-event report"]},
+      {name:"Icon event",price:"Custom",rec:false,items:["Premium World Lens","Always-on Snap Map","Mega + nano creator roster","Multi-event campaign","Dedicated account team"]},
+    ],
+    ctaHl:"Every Saudi fan",ctaP:(c)=>`${c}'s audience is on Snapchat right now. Let's make every seat sold and every fan snapping.`
+  },
+  technology:{
+    title:(c)=>[`Building <span class="hl">${c}</span>`,`with Saudi Arabia's`,`tech generation`],
+    desc:(c)=>`A brand and talent strategy for ${c} — reaching the young tech-savvy Saudis defining the Kingdom's digital future.`,
+    tags:[["Objective","Brand & talent awareness"],["Market","KSA & GCC"],["Audience","Saudi tech talent 18–35"]],
+    prodTitle:"The technology brand toolkit",prodDesc:"Ranked for brand-building and talent attraction.",
+    products:[
+      {icon:"▶",name:"Snap Ads & video",sub:"Own the screen of Saudi's tech generation",tag:"Top pick",rec:true,desc:"Snapchat's 90% under-35 KSA audience is the demographic building Saudi Arabia's tech future. Full-screen video for brand launches, product announcements, and employer brand campaigns.",stats:[{v:"90%",l:"users under 35 in KSA"},{v:"21M",l:"daily active users"},{v:"#1",l:"reach among tech-age Saudis"}]},
+      {icon:"📍",name:"AR Lenses",sub:"Demonstrate what you build",tag:"Innovation",rec:false,desc:"AR Lenses make your product tangible — an AI assistant through your camera, a data visualisation in your room. Nothing communicates innovation like AR.",stats:[{v:"6×",l:"more shares"},{v:"180M",l:"daily AR users"},{v:"2×",l:"brand recall lift"}]},
+      {icon:"⭐",name:"Creator partnerships",sub:"Saudi tech voices amplify your story",tag:"Credibility",rec:false,desc:"Tech and career creators translate your brand story into authentic content for Saudi youth. Powerful for employer branding and Vision 2030 positioning.",stats:[{v:"400+",l:"KSA creators"},{v:"4×",l:"engagement lift"},{v:"3×",l:"higher trust score"}]},
+      {icon:"🗺",name:"Promoted Places",sub:"Put your HQ and events on the map",tag:"Discovery",rec:false,desc:"Pin your offices, hackathon venues, and recruitment events on Snap Map. Young Saudis discover career opportunities at the right moment.",stats:[{v:"350M",l:"monthly Map visits"},{v:"5×",l:"footfall uplift"},{v:"+3.2×",l:"careers page visits"}]},
+    ],
+    case:{tag:"Technology — GCC tech brand study",title:"Employer brand + product launch: Snap Ads + Creators",desc:"A GCC technology company used Snapchat to drive product awareness and employer brand simultaneously among Saudi tech graduates — strong uplift in awareness and career page visits.",nums:[{v:"+19pt",l:"Brand awareness lift"},{v:"+3.2×",l:"Careers page visits"},{v:"16M",l:"Unique users reached"}]},
+    tl:[
+      {phase:"Weeks 1–4 · Launch",name:"Brand film + AR demo",desc:"Hero Snap Ads go live. AR Lens demonstrates product innovation. Tech creators activated.",pills:["Snap Ads","AR Lens","Tech creators"]},
+      {phase:"Weeks 5–10 · Build",name:"Talent + product storytelling",desc:"Creator content shifts to employer brand. Dynamic Ads retarget. Promoted Places drive event footfall.",pills:["Employer brand","Dynamic Ads","Events"]},
+      {phase:"Weeks 11–12 · Measure",name:"Brand lift readout",desc:"Brand Lift measures awareness and employer brand perception uplift.",pills:["Brand Lift study","Talent metrics","Report"]},
+    ],
+    inv:[
+      {name:"Brand starter",price:"$60K+",rec:false,items:["Snap Ads video","KSA tech audience targeting","Basic reporting"]},
+      {name:"Full brand launch",price:"$150K+",rec:true,items:["Snap Ads + Story Ads","AR innovation Lens","3 creator partnerships","Dynamic Ads retargeting","Brand Lift study"]},
+      {name:"Category builder",price:"Custom",rec:false,items:["Full product suite","Always-on employer brand","Mega creator roster","AR experience suite","Dedicated account team"]},
+    ],
+    ctaHl:"Saudi Arabia's tech talent",ctaP:(c)=>`The people who will build ${c}'s future are on Snapchat right now. Let's make sure they know your name.`
+  },
+  automotive:{
+    title:(c)=>[`Drive <span class="hl">${c}</span>`,`into every Saudi's`,`imagination`],
+    desc:(c)=>`An automotive awareness strategy for ${c} — AR test drives, creator first-drives, and full-funnel campaigns from first impression to showroom.`,
+    tags:[["Objective","Awareness & consideration"],["Market","KSA & GCC"],["Audience","Saudi car buyers 22–40"]],
+    prodTitle:"The automotive marketing toolkit",prodDesc:"Ranked for the automotive buyer journey.",
+    products:[
+      {icon:"📍",name:"AR Lenses — virtual test drive",sub:"Experience the car before visiting",tag:"Top pick",rec:true,desc:"Place the car in your driveway, explore the interior, see yourself behind the wheel. The most shared automotive format on any social platform.",stats:[{v:"6×",l:"more shares"},{v:"180M",l:"daily AR users"},{v:"11M",l:"AR automotive interactions"}]},
+      {icon:"▶",name:"Snap Ads & video",sub:"Cinematic launch content",tag:"Awareness",rec:false,desc:"Full-screen cinematic video for vehicle reveals. Saudi car buyers discover new vehicles on their phones — not TV.",stats:[{v:"80%+",l:"KSA audience reachable"},{v:"2×",l:"ad recall vs TV"},{v:"+24pt",l:"model awareness uplift"}]},
+      {icon:"⭐",name:"Creator partnerships",sub:"First-drives that convert",tag:"Consideration",rec:false,desc:"Automotive and luxury creators give your vehicle credibility. First-drive content drives consideration better than any ad.",stats:[{v:"400+",l:"KSA creators"},{v:"4×",l:"engagement lift"},{v:"+18pt",l:"showroom visit intent"}]},
+      {icon:"🗺",name:"Promoted Places",sub:"Drive buyers to your showroom",tag:"Footfall",rec:false,desc:"Pin your dealerships on Snap Map. Buyers in the consideration phase find your showroom at the right moment.",stats:[{v:"350M",l:"monthly Map visits"},{v:"5×",l:"footfall uplift"},{v:"+18pt",l:"showroom visit intent"}]},
+    ],
+    case:{tag:"Automotive — GCC vehicle launch study",title:"EV launch: AR Lens + Creator partnerships + Snap Ads",desc:"A premium automotive brand launched a new EV in the GCC using Snapchat. The AR Lens became the most shared piece of launch content across all channels.",nums:[{v:"+24pt",l:"Model awareness lift"},{v:"+18pt",l:"Showroom visit intent"},{v:"11M",l:"AR Lens interactions"}]},
+    tl:[
+      {phase:"Weeks 1–3 · Reveal",name:"Launch film + AR Lens",desc:"Cinematic Snap Ads go live. AR 'place in your driveway' Lens launches. Three automotive creators get first-drive access.",pills:["Launch film","AR Lens","Creator first-drives"]},
+      {phase:"Weeks 4–9 · Consideration",name:"Deep dive + showroom drive",desc:"Creator content covers features and ownership. Dynamic Ads retarget. Promoted Places drive showroom visits.",pills:["Feature content","Dynamic Ads","Showroom pins"]},
+      {phase:"Weeks 10–12 · Convert",name:"Test drive push + reporting",desc:"Localised Snap Ads drive test drive bookings. Brand Lift study results delivered.",pills:["Test drive campaign","Dealer ads","Brand Lift study"]},
+    ],
+    inv:[
+      {name:"Launch awareness",price:"$60K+",rec:false,items:["Snap Ads launch film","Promoted Places (dealerships)","Basic targeting & reporting"]},
+      {name:"Full launch suite",price:"$150K+",rec:true,items:["Snap Ads + Story Ads","AR try-the-car Lens","3 creator first-drives","Dynamic Ads retargeting","Promoted Places","Brand Lift study"]},
+      {name:"Icon launch",price:"Custom",rec:false,items:["Full product suite","World Lens experience","Mega creator roster","Always-on dealership map","Dedicated account team"]},
+    ],
+    ctaHl:"Every Saudi car buyer",ctaP:(c)=>`Every Saudi dreaming about their next car is on Snapchat. Let's make ${c} the one they can't stop thinking about.`,
+  government:{
+    title:(c)=>[`<span class="hl">${c}</span> — reaching`,`every Saudi citizen`,`<span class="hl-outline">where they live</span>`],
+    desc:(c)=>`A Snapchat public engagement strategy for ${c} — communicating Vision 2030 initiatives, government services, and national campaigns to Saudi Arabia's young, mobile-first population.`,
+    tags:[["Objective","Public engagement & awareness"],["Market","KSA"],["Audience","Saudi citizens 16–40"]],
+    prodTitle:"The government communications toolkit",
+    prodDesc:"Ranked for public reach and citizen engagement. Tap to explore.",
+    products:[
+      {icon:"▶",name:"Snap Ads & video",sub:"National scale, guaranteed reach",tag:"Top pick",rec:true,
+       desc:"No other platform reaches more Saudi citizens at scale. With 80%+ KSA penetration and 90% of users under 35, Snapchat is the primary screen for the generation that Vision 2030 is built for. Ideal for national campaigns, service announcements, and initiative launches.",
+       stats:[{v:"80%+",l:"KSA Snapchat penetration"},{v:"21M",l:"daily active users in KSA"},{v:"#1",l:"reach among 18–35 Saudi citizens"}]},
+      {icon:"📍",name:"AR Lenses & Filters",sub:"Civic pride, national moments",tag:"High engagement",rec:false,
+       desc:"National Day, Founding Day, Vision 2030 milestones — AR Lenses make citizens part of the national narrative. Branded civic filters generate massive organic reach as Saudis share them across their networks.",
+       stats:[{v:"6×",l:"more shares vs standard ads"},{v:"180M",l:"daily AR users worldwide"},{v:"92%",l:"KSA Snapchatters more likely to engage on National Day"}]},
+      {icon:"🗺",name:"Promoted Places",sub:"Drive citizens to government services",tag:"Discovery",rec:false,
+       desc:"Pin government service centres, events, exhibitions, and public venues on Snap Map. Citizens discover services and locations at the moment of need — driving footfall to physical government touchpoints.",
+       stats:[{v:"350M",l:"monthly Snap Map visits"},{v:"5×",l:"footfall uplift"},{v:"#1",l:"social discovery map globally"}]},
+      {icon:"⭐",name:"Creator partnerships",sub:"Trusted voices for public campaigns",tag:"Credibility",rec:false,
+       desc:"Saudi lifestyle, education, and culture creators give government initiatives authentic credibility with youth. Particularly powerful for awareness campaigns around health, education, employment, and civic participation.",
+       stats:[{v:"400+",l:"active KSA creators"},{v:"4×",l:"engagement lift"},{v:"3×",l:"higher message retention"}]},
+      {icon:"🔄",name:"Dynamic Ads",sub:"Personalised citizen communications",tag:"Targeting",rec:false,
+       desc:"Retarget citizens who engaged with campaigns or visited government portals. Serve the right message — benefits, services, deadlines — to the right audience at the right moment.",
+       stats:[{v:"3×",l:"engagement uplift"},{v:"60%",l:"lower cost per engagement"},{v:"2×",l:"message recall lift"}]},
+    ],
+    case:{eyebrow:"Government — Saudi National Day campaign",title:"National Day civic campaign: AR Lens + Snap Ads",
+      desc:"A Saudi government entity ran a National Day campaign on Snapchat combining a branded AR Lens with Snap Ads targeting Saudi nationals. The AR Lens became the most shared piece of campaign content, generating millions of organic impressions beyond the paid spend — turning every citizen into a campaign ambassador.",
+      nums:[{v:"92%",l:"KSA Snapchatters engage with National Day ads"},{v:"8M+",l:"AR Lens impressions"},{v:"+19pt",l:"Campaign message recall"}]},
+    tl:[
+      {phase:"Weeks 1–3 · Launch",name:"Hero campaign + AR Lens",desc:"National campaign Snap Ads go live. Branded AR Lens launches for key moment (National Day, initiative launch). Creator partnerships activated.",pills:["Snap Ads","AR Lens","Creator content","Snap Map"]},
+      {phase:"Weeks 4–9 · Sustain",name:"Service awareness + retargeting",desc:"Promoted Places drive citizens to service centres. Dynamic Ads retarget engaged users with specific service messaging. Mid-tier creator wave.",pills:["Promoted Places","Dynamic Ads","Creator wave","Service targeting"]},
+      {phase:"Weeks 10–12 · Measure",name:"Reach & recall readout",desc:"Brand Lift study measures campaign awareness and message recall uplift across target demographics. Full report delivered.",pills:["Brand Lift study","Reach report","Recall data"]},
+    ],
+    inv:[
+      {name:"Campaign starter",price:"$60K+",rec:false,items:["Snap Ads national reach","KSA citizen targeting","Basic campaign reporting"]},
+      {name:"Full engagement",price:"$150K+",rec:true,items:["Snap Ads + Story Ads","AR Lens (civic design)","Creator partnerships","Promoted Places","Brand Lift study"]},
+      {name:"National campaign",price:"Custom",rec:false,items:["Full product suite","Premium World Lens","Always-on Snap Map","Multi-wave creator programme","Dedicated government account team"]},
+    ],
+    ctaHl:"Every Saudi citizen",
+    ctaP:(c)=>`The citizens ${c} needs to reach are on Snapchat right now. Let's make your message impossible to miss.`
+  }
+  }
+};
+
+const CALC_DATA = {
+  tourism:      { cpm:5.5,  freq:.65, cprRedux:.40, roas:2.2, kpi:'destination page visits',     src:'Tourism authority MENA — +18pt awareness, 22M reach' },
+  retail:       { cpm:4.8,  freq:.62, cprRedux:.42, roas:3.2, kpi:'product conversions',          src:'GCC retail Ramadan — 3.2× ROAS, -58% cost per purchase' },
+  telecom:      { cpm:6.2,  freq:.60, cprRedux:.35, roas:2.6, kpi:'plan enquiries & installs',    src:'GCC telco 5G launch — +21pt awareness, 18M reach' },
+  finance:      { cpm:5.8,  freq:.63, cprRedux:.40, roas:2.8, kpi:'app installs & leads',         src:'Tamam KSA — 31% of social loan apps from Snap, 4× above benchmark' },
+  entertainment:{ cpm:4.5,  freq:.68, cprRedux:.36, roas:2.4, kpi:'ticket clicks & footfall',     src:'Saudi entertainment event — +31% footfall, 8M AR impressions' },
+  technology:   { cpm:6.0,  freq:.61, cprRedux:.37, roas:2.5, kpi:'careers visits & leads',       src:'GCC tech brand — +19pt awareness, +3.2× careers page visits' },
+  automotive:   { cpm:7.2,  freq:.58, cprRedux:.44, roas:2.9, kpi:'showroom intent & test drives', src:'GCC EV launch — +24pt awareness, +18pt showroom visit intent' },
+  government:   { cpm:5.2,  freq:.66, cprRedux:.38, roas:2.3, kpi:'citizen reach & message recall',   src:'Saudi National Day — 92% engagement rate, 8M+ AR impressions' }
+};
+
+const MARQUEE=[
+  {n:"80%+",l:"KSA penetration"},{n:"21M",l:"Daily KSA users"},{n:"90%",l:"Users under 35"},
+  {n:"35min",l:"Daily time on app"},{n:"180M",l:"AR users daily"},{n:"6×",l:"More shares with AR"},
+  {n:"5×",l:"Footfall uplift"},{n:"400+",l:"KSA creators"},{n:"350M",l:"Snap Map visits/mo"},
+  {n:"2×",l:"Ad recall vs TV"},{n:"14%",l:"Higher ROI vs all media"},{n:"5×",l:"More attention than in-feed"},
+  {n:"110%",l:"Sales uplift from doubling spend"},{n:"#1",l:"KSA platform penetration"},
+];
+
+const STAT_BUYER = [
+  {n:'$5–7',  l:'Average CPM in KSA — vs $12–18 on Meta', src:'Snapchat internal data, 2025'},
+  {n:'80%+',  l:'KSA Snapchat penetration — highest globally', src:'Snapchat internal data, 2025'},
+  {n:'3×',    l:'ROAS uplift in the GCC (MMM study)', src:'Snap × OMG MENA 2025'},
+];
+const STAT_EXEC = [
+  {n:'14%',   l:'Higher ROI than all other media categories in the GCC', src:'Snap × OMG MENA MMM Study, 2025'},
+  {n:'110%',  l:'Projected sales increase from doubling Snapchat spend', src:'GCC MMM Analysis 2025'},
+  {n:'5×',    l:'More active attention vs other mobile in-feed video', src:'Amplified Intelligence, 2025'},
+];
+const EXEC_GOALS = {
+  reach:      'For every dollar you invest, your message reaches the largest under-35 Saudi audience of any digital platform — {reach} unique citizens at {budget}.',
+  awareness:  'Based on GCC Brand Lift benchmarks, this level of investment is projected to deliver a meaningful awareness uplift among your target audience in KSA.',
+  engagement: 'Snapchat\'s AR and creator formats drive 6× more shares than standard ads — turning your media budget into earned reach that multiplies organically.',
+  action:     'Snapchat delivers 14% higher ROI than all other media categories in the GCC. Every dollar invested here works harder than anywhere else.'
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
+var currentSector = 'tourism';
+var currentPersona = 'buyer';
+var currentExecGoal = 'reach';
+var lastClient = 'Your brand';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PERSONA — THE SIMPLE VERSION THAT JUST WORKS
+// ─────────────────────────────────────────────────────────────────────────────
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STAT BAND
+// ─────────────────────────────────────────────────────────────────────────────
+
+function setPersona(p) {
+  currentPersona = p;
+  var bBuyer = document.getElementById('pBuyer');
+  var bExec  = document.getElementById('pExec');
+  var cBuyer = document.getElementById('calcBuyer');
+  var cExec  = document.getElementById('calcExec');
+  var sb     = document.getElementById('statBand');
+
+  if (!bBuyer || !bExec || !cBuyer || !cExec) return;
+
+  bBuyer.className = (p === 'buyer') ? 'pbtn on' : 'pbtn';
+  bExec.className  = (p === 'exec')  ? 'pbtn on' : 'pbtn';
+  cBuyer.style.display = (p === 'buyer') ? 'block' : 'none';
+  cExec.style.display  = (p === 'exec')  ? 'block' : 'none';
+
+  if (sb) {
+    if (p === 'exec') {
+      sb.innerHTML =
+        '<div class="sb-item"><div class="sb-num">14%</div><div class="sb-lbl">Higher ROI than all other GCC media categories</div><div class="sb-src">Snap × OMG MENA × Annalect MMM Study, 2025</div></div>' +
+        '<div class="sb-item"><div class="sb-num">110%</div><div class="sb-lbl">Projected sales increase from doubling Snapchat spend</div><div class="sb-src">GCC MMM Analysis 2025</div></div>' +
+        '<div class="sb-item"><div class="sb-num">5×</div><div class="sb-lbl">More active attention vs other mobile in-feed video</div><div class="sb-src">Amplified Intelligence, 2025</div></div>';
+    } else {
+      sb.innerHTML =
+        '<div class="sb-item"><div class="sb-num">$5–7</div><div class="sb-lbl">Average CPM in KSA — vs $12–18 on Meta</div><div class="sb-src">Snapchat internal data, 2025</div></div>' +
+        '<div class="sb-item"><div class="sb-num">80%+</div><div class="sb-lbl">KSA Snapchat penetration — highest globally</div><div class="sb-src">Snapchat internal data, 2025</div></div>' +
+        '<div class="sb-item"><div class="sb-num">3×</div><div class="sb-lbl">ROAS uplift in the GCC (MMM study)</div><div class="sb-src">Snap × OMG MENA 2025</div></div>';
+    }
+  }
+
+  if (p === 'exec' && typeof execCalc === 'function') execCalc();
+  if (p === 'buyer' && typeof snapCalc === 'function') snapCalc();
+}
+
+function buildStatBand(persona) {
+  var band = document.getElementById('statBand');
+  if (!band) return;
+  var items = persona === 'exec' ? STAT_EXEC : STAT_BUYER;
+  band.innerHTML = items.map(function(i) {
+    return '<div class="sb-item"><div class="sb-num">' + i.n + '</div><div class="sb-lbl">' + i.l + '</div><div class="sb-src">' + i.src + '</div></div>';
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+function fmtUSD(n) { return '$' + Math.round(n).toLocaleString(); }
+function fmtBig(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return Math.round(n/1000) + 'K';
+  return Math.round(n).toLocaleString();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUYER CALCULATOR
+// ─────────────────────────────────────────────────────────────────────────────
+function selRT(btn) {
+  document.querySelectorAll('.rt-btn').forEach(function(b) { b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  var sl = document.getElementById('cCPR');
+  if (sl) { sl.value = btn.dataset.cpr; }
+  snapCalc();
+}
+
+function snapCalc() {
+  var d = CALC_DATA[currentSector] || CALC_DATA.tourism;
+  var budget = parseInt(document.getElementById('cBudget').value);
+  var cpr    = parseFloat(document.getElementById('cCPR').value);
+
+  document.getElementById('cBudgetVal').textContent = fmtUSD(budget);
+  document.getElementById('cCPRVal').textContent    = fmtUSD(cpr);
+
+  var impressions = Math.round((budget / d.cpm) * 1000);
+  var reach       = Math.round(impressions * d.freq);
+  var snapCPR     = Math.round(cpr * (1 - d.cprRedux));
+  var indAvgCPR   = Math.round(cpr * 1.15);
+  var results     = Math.round(budget / snapCPR);
+  var returnVal   = Math.round(budget * d.roas);
+  var saving      = Math.round((cpr - snapCPR) * results);
+
+  var rtBtn = document.querySelector('.rt-btn.sel');
+  var kpi   = rtBtn ? rtBtn.dataset.kpi : 'results';
+
+  document.getElementById('cCards').innerHTML =
+    '<div class="cc cc-hero"><div class="cc-lbl">Projected return</div><div class="cc-val">' + fmtUSD(returnVal) + '</div><div class="cc-sub">' + d.roas + '× ROAS on ' + fmtUSD(budget) + '</div></div>' +
+    '<div class="cc"><div class="cc-lbl">Unique reach in KSA</div><div class="cc-val">' + fmtBig(reach) + '</div><div class="cc-sub">unique Snapchatters</div></div>' +
+    '<div class="cc"><div class="cc-lbl">Projected ' + kpi + '</div><div class="cc-val">' + fmtBig(results) + '</div><div class="cc-sub">' + d.kpi + '</div></div>' +
+    '<div class="cc"><div class="cc-lbl">Cost saving vs benchmark</div><div class="cc-val">' + fmtUSD(saving) + '</div><div class="cc-sub">' + Math.round(d.cprRedux*100) + '% lower cost</div></div>';
+
+  var mx = Math.max(snapCPR, cpr, indAvgCPR);
+  document.getElementById('cbsv').textContent = fmtUSD(snapCPR) + ' / result';
+  document.getElementById('cbbv').textContent = fmtUSD(cpr) + ' / result';
+  document.getElementById('cbiv').textContent = fmtUSD(indAvgCPR) + ' / result';
+  document.getElementById('cbsBar').style.width = Math.round(snapCPR/mx*100) + '%';
+  document.getElementById('cbiBar').style.width = Math.round(indAvgCPR/mx*100) + '%';
+
+  document.getElementById('cBreakdown').innerHTML =
+    '<div class="cbd-row"><span class="cbd-lbl">Monthly budget</span><span class="cbd-val">' + fmtUSD(budget) + '</span></div>' +
+    '<div class="cbd-row"><span class="cbd-lbl">Est. impressions</span><span class="cbd-val">' + fmtBig(impressions) + '</span></div>' +
+    '<div class="cbd-row"><span class="cbd-lbl">Unique reach (KSA)</span><span class="cbd-val">' + fmtBig(reach) + '</span></div>' +
+    '<div class="cbd-row"><span class="cbd-lbl">Snapchat cost per result</span><span class="cbd-val">' + fmtUSD(snapCPR) + '</span></div>' +
+    '<div class="cbd-row"><span class="cbd-lbl">Your current cost per result</span><span class="cbd-val">' + fmtUSD(cpr) + '</span></div>' +
+    '<div class="cbd-row"><span class="cbd-lbl">Projected ' + kpi + '</span><span class="cbd-val">' + fmtBig(results) + '</span></div>' +
+    '<div class="cbd-row"><span class="cbd-lbl">Cost saving vs benchmark</span><span class="cbd-val">' + fmtUSD(saving) + '</span></div>' +
+    '<div class="cbd-row"><span class="cbd-lbl">Projected total return</span><span class="cbd-val">' + fmtUSD(returnVal) + '</span></div>';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EXEC CALCULATOR
+// ─────────────────────────────────────────────────────────────────────────────
+function selEG(btn) {
+  document.querySelectorAll('.eg-btn').forEach(function(b) { b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  currentExecGoal = btn.dataset.goal;
+  execCalc();
+}
+
+function execCalc() {
+  var d      = CALC_DATA[currentSector] || CALC_DATA.tourism;
+  var budget = parseInt(document.getElementById('eBudget').value);
+  document.getElementById('eBudgetVal').textContent = fmtUSD(budget);
+
+  var impressions = Math.round((budget / d.cpm) * 1000);
+  var reach       = Math.round(impressions * d.freq);
+  var returnVal   = Math.round(budget * d.roas);
+  var ksaPct      = Math.min(99, Math.round((reach / 21000000) * 100));
+  var awareness   = Math.min(18, Math.round(4 + (budget / 500000) * 14));
+
+  document.getElementById('eCards').innerHTML =
+    '<div class="ec ec-hero"><div class="ec-lbl">Estimated campaign return</div><div class="ec-val">' + fmtUSD(returnVal) + '</div><div class="ec-sub">' + d.roas + '× return on ' + fmtUSD(budget) + ' invested</div></div>' +
+    '<div class="ec"><div class="ec-lbl">Saudis reached</div><div class="ec-val">' + fmtBig(reach) + '</div><div class="ec-sub">unique citizens in KSA</div></div>' +
+    '<div class="ec"><div class="ec-lbl">Share of KSA audience</div><div class="ec-val">' + ksaPct + '%</div><div class="ec-sub">of all KSA Snapchatters</div></div>' +
+    '<div class="ec"><div class="ec-lbl">Projected awareness lift</div><div class="ec-val">+' + awareness + 'pt</div><div class="ec-sub">aided brand awareness (est.)</div></div>' +
+    '<div class="ec"><div class="ec-lbl">ROI vs all other GCC media</div><div class="ec-val">+14%</div><div class="ec-sub">highest of any platform</div></div>';
+
+  var tpl = EXEC_GOALS[currentExecGoal] || EXEC_GOALS.reach;
+  var stmt = tpl.replace('{reach}', fmtBig(reach)).replace('{budget}', fmtUSD(budget));
+  document.getElementById('eStatement').innerHTML =
+    '<div class="es-label">The business case</div><div class="es-text">' + stmt + '</div>';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUILD PAGE FROM URL PARAMS
+// ─────────────────────────────────────────────────────────────────────────────
+function getParams() {
+  var p = new URLSearchParams(window.location.search);
+  return { client: p.get('client') || 'Your brand', sector: p.get('sector') || 'tourism' };
+}
+
+function buildMarquee() {
+  var track = document.getElementById('marqueeTrack');
+  var items = MARQUEE.concat(MARQUEE);
+  track.innerHTML = items.map(function(i) {
+    return '<div class="m-item"><span class="m-num">' + i.n + '</span><span class="m-lbl">' + i.l + '</span><span class="m-sep"></span></div>';
+  }).join('');
+}
+
+function buildPage(params) {
+  var client = params.client;
+  var sector = params.sector;
+  currentSector = sector;
+  lastClient    = client;
+
+  var s = SECTORS[sector] || SECTORS.tourism;
+  document.title = 'Snapchat — ' + client;
+  document.getElementById('navPill').textContent = client;
+  document.getElementById('eyebrowTxt').textContent = 'Tailored for ' + client;
+
+  var lines = s.title(client);
+  document.getElementById('heroTitle').innerHTML = lines.map(function(l) {
+    return '<span class="tline"><span class="tline-in">' + l + '</span></span>';
+  }).join('');
+
+  document.getElementById('heroDesc').textContent = s.desc(client);
+  document.getElementById('heroTags').innerHTML = s.tags.map(function(t) {
+    return '<div class="htag">' + t[0] + ' <strong>' + t[1] + '</strong></div>';
+  }).join('');
+  document.getElementById('prodTitle').textContent = s.prodTitle;
+  document.getElementById('prodDesc').textContent  = s.prodDesc;
+
+  // Products
+  var pl = document.getElementById('productsList');
+  pl.innerHTML = '';
+  s.products.forEach(function(p, i) {
+    var d = document.createElement('div');
+    d.className = 'pcard' + (i===0 ? ' open' : '');
+    d.innerHTML =
+      '<div class="pcard-head">' +
+        '<div class="pcard-left">' +
+          '<div class="pcard-icon">' + p.icon + '</div>' +
+          '<div><div class="pcard-title">' + p.name + '</div><div class="pcard-sub">' + p.sub + '</div></div>' +
+        '</div>' +
+        '<div class="pcard-right">' +
+          '<span class="' + (p.rec ? 'badge-top' : 'badge-std') + '">' + p.tag + '</span>' +
+          '<svg class="pcard-chev" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6l5 5 5-5"/></svg>' +
+        '</div>' +
+      '</div>' +
+      '<div class="pcard-body"><div class="pcard-body-inner">' +
+        '<p class="pcard-desc">' + p.desc + '</p>' +
+        '<div class="pcard-stats">' + p.stats.map(function(st) {
+          return '<div class="pstat"><div class="pstat-n">' + st.v + '</div><div class="pstat-l">' + st.l + '</div></div>';
+        }).join('') + '</div>' +
+      '</div></div>';
+    d.querySelector('.pcard-head').addEventListener('click', function() {
+      var open = d.classList.contains('open');
+      document.querySelectorAll('.pcard').forEach(function(x) { x.classList.remove('open'); });
+      if (!open) d.classList.add('open');
+    });
+    pl.appendChild(d);
+  });
+
+  // Case study
+  var cs = s.case;
+  document.getElementById('caseCard').innerHTML =
+    '<div class="case-top"><div class="case-eyebrow">' + cs.eyebrow + '</div><div class="case-title">' + cs.title + '</div></div>' +
+    '<div class="case-nums">' + cs.nums.map(function(n) {
+      return '<div class="case-num"><div class="cn-v">' + n.v + '</div><div class="cn-l">' + n.l + '</div></div>';
+    }).join('') + '</div>' +
+    '<div class="case-bottom"><p class="case-desc">' + cs.desc + '</p></div>';
+
+  // Timeline
+  var tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  s.tl.forEach(function(t, i) {
+    var r = document.createElement('div');
+    r.className = 'tl-row';
+    r.innerHTML =
+      '<div class="tl-spine"><div class="tl-num">' + (i+1) + '</div><div class="tl-line"></div></div>' +
+      '<div class="tl-body">' +
+        '<div class="tl-phase">' + t.phase + '</div>' +
+        '<div class="tl-name">' + t.name + '</div>' +
+        '<p class="tl-desc">' + t.desc + '</p>' +
+        '<div class="tl-pills">' + t.pills.map(function(p) { return '<span class="tl-pill">' + p + '</span>'; }).join('') + '</div>' +
+      '</div>';
+    tl.appendChild(r);
+  });
+
+  // Investment packages
+  var ig = document.getElementById('invGrid');
+  ig.innerHTML = '';
+  s.inv.forEach(function(c) {
+    var d = document.createElement('div');
+    d.className = 'icard' + (c.rec ? ' rec' : '');
+    d.innerHTML =
+      '<div class="i-name">' + c.name + '</div>' +
+      '<div class="i-price">' + c.price + '</div>' +
+      '<ul class="i-items">' + c.items.map(function(i) {
+        return '<li><span class="i-dot"></span>' + i + '</li>';
+      }).join('') + '</ul>';
+    ig.appendChild(d);
+  });
+
+  // CTA
+  document.getElementById('ctaHl').textContent = s.ctaHl;
+  document.getElementById('ctaP').textContent   = s.ctaP(client);
+  var waMsg = encodeURIComponent('Hi, I just reviewed the Snapchat proposal for ' + client + ' and I\'d love to book a strategy session. — Ahmed Mahdy, Snapchat MENA');
+  document.getElementById('ctaWa').href = 'https://wa.me/966000000000?text=' + waMsg;
+
+  document.getElementById('ctaShareBtn').onclick = function() {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+      var btn = document.getElementById('ctaShareBtn');
+      btn.textContent = 'Link copied ✓';
+      setTimeout(function() { btn.textContent = 'Share this proposal'; }, 2500);
+    });
+  };
+
+  // Recalculate
+  snapCalc();
+  execCalc();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SCROLL & REVEAL
+// ─────────────────────────────────────────────────────────────────────────────
+window.addEventListener('scroll', function() {
+  var pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('prog').style.width = Math.min(pct, 100) + '%';
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.rv').forEach(function(el) { obs.observe(el); });
+setTimeout(function() {
+  document.querySelectorAll('.rv').forEach(function(el) { el.classList.add('in'); });
+}, 600);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+buildMarquee();
+buildStatBand('buyer');
+buildPage(getParams());
+execCalc();
+</script>
+</body>
+</html>
